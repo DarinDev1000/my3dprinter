@@ -7,3 +7,9 @@ jspm_packages
 
 # Webpack directories
 .webpack
+
+# env file
+my-env.yml
+env.yml
+.env
+environment

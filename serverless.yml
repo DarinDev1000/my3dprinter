@@ -8,34 +8,36 @@ plugins:
 provider:
   name: aws
   runtime: nodejs8.10
+  stage: dev
+  profile: ${file(env.yml):PROFILE}
 
 custom:
   alexa:
     # Step 1: Run `sls alexa auth` to authenticate
-    # Step 2: Run `sls alexa create --name "Serverless Alexa Typescript" --locale en-GB --type custom` to create a new skill
+    # Step 2: Run `sls alexa create --name "My 3D Printer" --locale en-US --type custom` to create a new skill
     skills:
         # Step 3: Paste the skill id returned by the create command here:
-      - id: amzn1.ask.skill.xxxx-xxxx-xxxx-xxxx-xxxx
+      - id: ${file(env.yml):SKILL_ID}
         manifest:
           publishingInformation:
             locales:
-              en-GB:
-                name: Serverless Alexa Typescript
+              en-US:
+                name: My 3D Printer
           apis:
             custom:
               endpoint:
                 # Step 4: Do your first deploy of your Serverless stack
                 # Step 5: Paste the ARN of your lambda here:
-                uri: arn:aws:lambda:[region]:[account-id]:function:[function-name]
+                uri: ${file(env.yml):ENDPOINT_URI}
                 # Step 6: Run `sls alexa update` to deploy the skill manifest
                 # Step 7: Run `sls alexa build` to build the skill interaction model
                 # Step 8: Enable the skill in the Alexa app to start testing.
           manifestVersion: '1.0'
         models:
-          en-GB:
+          en-US:
             interactionModel:
               languageModel:
-                invocationName: serverless typescript
+                invocationName: my three d printer
                 intents:
                   - name: HelloIntent
                     samples:

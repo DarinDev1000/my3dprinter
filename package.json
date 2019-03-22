@@ -1,10 +1,14 @@
 {
   "name": "my3dprinter",
   "version": "1.0.0",
-  "description": "Alexa example using Typescript",
+  "description": "My 3D Printer Alexa Skill",
   "main": "handler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "update": "echo 'sls alexa update'; sls alexa update; echo 'sls alexa build'; sls alexa build; echo 'sls deploy'; sls deploy; echo 'DONE'",
+    "alexa-update": "echo 'sls alexa update'; sls alexa update; echo 'sls alexa build'; sls alexa build; echo 'DONE'",
+    "lambda-deploy": "echo 'sls deploy'; sls deploy; echo 'DONE'",
+    "logs": "sls logs -f alexa"
   },
   "dependencies": {
     "ask-sdk": "^2.3.0",
