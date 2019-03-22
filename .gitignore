@@ -13,3 +13,6 @@ my-env.yml
 env.yml
 .env
 environment
+
+# history
+.history
