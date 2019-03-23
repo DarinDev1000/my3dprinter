@@ -42,9 +42,11 @@ custom:
                   - name: OctoprintTestIntent
                     samples:
                       - 'test print'
-                  - name: SearchIntent
+                  - name: NewestThingsIntent
                     samples: 
                       - 'Search Newest Things'
+                      - 'Search New Things'
+                      - 'New Things'
 
 functions:
   alexa:
