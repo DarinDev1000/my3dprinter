@@ -39,9 +39,6 @@ custom:
               languageModel:
                 invocationName: my three d printer
                 intents:
-                  - name: HelloIntent
-                    samples:
-                      - 'hello'
                   - name: OctoprintTestIntent
                     samples:
                       - 'test print'
