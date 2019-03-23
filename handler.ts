@@ -42,36 +42,62 @@ const OctoprintTestIntentHandler = {
   }
 }
 
+
 const SearchThingIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'SearchThingIntent';
   },
 
+
   async handle(handlerInput) {
     let data: any;
     let speechText: string;
-    const options = {
+    let options = {
       method: 'get',
-      url: `${api.thingiverseUrl}/search/${handlerInput.requestEnvelope.request.intent.slots.thingQuery.value}?access_token=${api.thingiverseToken}`
+      url: `${api.thingiverseUrl}search/${handlerInput.requestEnvelope.request.intent.slots.thingQuery.value}?access_token=${api.thingiverseToken}`
     }
     
-    let result: any;
+
+    let items
     try {
       data = await axios(options);
-      result = data.data[0];
-      console.log(result)
+      items = data.data[0];
+      console.log(items)
     } catch (e) {
       console.log(e)
     }
 
-    speechText = `the id for ${result.name} is ${result.id}.`;
+    options = {
+      method: 'get',
+      url: `${api.thingiverseUrl}things/${items.id}?access_token=${api.thingiverseToken}`
+    }
+    let things
+    let result: any;
+    try {
+      things = await axios(options);
+      result = data.data;
+      console.log(result)
+    } catch (e) {
+      console.log(e)
+    }
+    let thingString = `The files for ${items.name} are `;
+    // if (Array.isArray(things)) {
+      for (let thing of result) {
+        thingString +=  ", name: " + thing.name + ", file id: " + thing.id;
+      }
+    // } else {
+    //   thingString +=  ", name: " + things.name + " file id: " + things.id;
+    // }
+
+
+    speechText = `the id for ${items.name} is ${items.id}. ${thingString}`;
     // console.log("Name:", handlerInput.requestEnvelope.request.intent.slots.thingQuery.value)
     // const speechText = handlerInput.requestEnvelope.request.intent.slots.thingQuery.value;
     // console.log('Speech Text', speechText)
 
     return handlerInput.responseBuilder
-      .speak('You asked for  ' + speechText)
+      .speak(speechText)
       // .reprompt("test reprompt")
       .withSimpleCard('Search Thing', speechText)
       .getResponse();

@@ -10,6 +10,12 @@ provider:
   runtime: nodejs8.10
   stage: dev
   profile: ${file(env.yml):PROFILE}
+  environment:
+    DB_HOST:     ${file(env.yml):DB_HOST}
+    DB_PORT:     ${file(env.yml):DB_PORT}
+    DB_USER:     ${file(env.yml):DB_USER}
+    DB_PASSWORD: ${file(env.yml):DB_PASSWORD}
+    DB_DATABASE: ${file(env.yml):DB_DATABASE}
 
 custom:
   alexa:
