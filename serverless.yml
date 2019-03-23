@@ -48,6 +48,13 @@ custom:
                   - name: OctoprintTestIntent
                     samples:
                       - 'test print'
+                  - name: PrintThingIntent
+                    slots:
+                      - name: thingQuery
+                        type: AMAZON.SearchQuery
+                    samples: 
+                      - 'Print {thingQuery}'
+
                   - name: SearchThingIntent
                     slots:
                       - name: thingQuery

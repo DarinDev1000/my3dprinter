@@ -42,6 +42,57 @@ const OctoprintTestIntentHandler = {
   }
 }
 
+const PrintThingIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'PrintThingIntent';
+  },
+
+  async handle(handlerInput) {
+    let data: any;
+    let speechText: string;
+    const options = {
+      method: 'get',
+      url: `${api.thingiverseUrl}search/${handlerInput.requestEnvelope.request.intent.slots.thingQuery.value}?access_token=${api.thingiverseToken}`
+    }
+
+    let items
+    try {
+      data = await axios(options);
+      items = data.data[0];
+      console.log( 'items', items)
+    } catch (e) {
+      console.log('error in items')
+      console.log(e)
+    }
+
+    const newoptions = {
+      method: 'get',
+      url: `${api.thingiverseUrl}things/${items.id}?access_token=${api.thingiverseToken}`
+    }
+    let things
+    let result: any;
+    try {
+      things = await axios(newoptions);
+      result = things.data;
+      console.log( 'result' ,result)
+    } catch (e) {
+      console.log('error in files')
+      console.log(e)
+    }
+
+    speechText = `printing ${result.name}`;
+    console.log("Speech Text", speechText)
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      // .reprompt("test reprompt")
+      .withSimpleCard('Print Thing', speechText)
+      .getResponse();
+  }
+
+ }
+
 
 const SearchThingIntentHandler = {
   canHandle(handlerInput) {
@@ -91,7 +142,7 @@ const SearchThingIntentHandler = {
     // }
 
 
-    speechText = `the id for ${items.name} is ${items.id}. ${thingString}`;
+    speechText = `the id for ${items.name} is ${items.id}.`;
     // console.log("Name:", handlerInput.requestEnvelope.request.intent.slots.thingQuery.value)
     // const speechText = handlerInput.requestEnvelope.request.intent.slots.thingQuery.value;
     // console.log('Speech Text', speechText)
@@ -190,6 +241,7 @@ export const alexa = Ask.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
     OctoprintTestIntentHandler,
+    PrintThingIntentHandler,
     SearchThingIntentHandler,
     NewestThingsIntentHandler,
     CancelIntentHandler,
