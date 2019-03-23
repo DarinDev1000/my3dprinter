@@ -42,6 +42,41 @@ const OctoprintTestIntentHandler = {
   }
 }
 
+const SearchThingIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'SearchThingIntent';
+  },
+
+  async handle(handlerInput) {
+    let data: any;
+    let speechText: string;
+    const options = {
+      method: 'get',
+      url: `${api.thingiverseUrl}/search/${handlerInput.requestEnvelope.request.intent.slots.thingQuery.value}?access_token=${api.thingiverseToken}`
+    }
+    
+    let result: any;
+    try {
+      data = await axios(options);
+      result = data.data[0];
+      console.log(result)
+    } catch (e) {
+      console.log(e)
+    }
+
+    speechText = `the id for ${result.name} is ${result.id}.`;
+    // console.log("Name:", handlerInput.requestEnvelope.request.intent.slots.thingQuery.value)
+    // const speechText = handlerInput.requestEnvelope.request.intent.slots.thingQuery.value;
+    // console.log('Speech Text', speechText)
+
+    return handlerInput.responseBuilder
+      .speak('You asked for  ' + speechText)
+      // .reprompt("test reprompt")
+      .withSimpleCard('Search Thing', speechText)
+      .getResponse();
+  }
+}
 
 const NewestThingsIntentHandler = {
   canHandle(handlerInput) {
@@ -71,11 +106,11 @@ const NewestThingsIntentHandler = {
       console.log(e)
     }
     let speechText: string = '';
-    console.log(things);
+    // console.log(things);
     for (let item of things) {
       speechText +=  ", " + item.name;
-      console.log(typeof item.name)
-      console.log(item.name)
+      // console.log(typeof item.name)
+      // console.log(item.name)
     }
     console.log('Speech Text', speechText)
 
@@ -129,6 +164,7 @@ export const alexa = Ask.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
     OctoprintTestIntentHandler,
+    SearchThingIntentHandler,
     NewestThingsIntentHandler,
     CancelIntentHandler,
     DefaultHandler
