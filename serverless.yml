@@ -42,6 +42,12 @@ custom:
                   - name: HelloIntent
                     samples:
                       - 'hello'
+                  - name: OctoprintTestIntent
+                    samples:
+                      - 'test print'
+                  - name: SearchIntent
+                    samples: 
+                      - 'Search Newest Things'
 
 functions:
   alexa:
