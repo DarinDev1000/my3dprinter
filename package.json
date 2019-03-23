@@ -13,7 +13,8 @@
   "dependencies": {
     "ask-sdk": "^2.3.0",
     "axios": "^0.18.0",
-    "source-map-support": "^0.5.10"
+    "source-map-support": "^0.5.10",
+    "thingiverse-js": "^1.0.1"
   },
   "devDependencies": {
     "@types/node": "^10.12.18",
