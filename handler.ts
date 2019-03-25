@@ -96,7 +96,7 @@ try{
     });
     console.log('connected!');
 
-    let dbcontent = await connection.execute(`insert into file_urls (url) values (?)`,[result.url]);
+    let dbcontent = await connection.execute(`insert into file_urls (url) values (?)`,[result.url+'?access_token='+ api.thingiverseToken]);
     console.log(dbcontent)
 
     speechText = 'printing';
