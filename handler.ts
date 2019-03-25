@@ -1,9 +1,12 @@
 import * as Ask from 'ask-sdk';
 import * as thingiverse from 'thingiverse-js'
+import * as sql from 'mysql2/promise'
 import 'source-map-support/register';
 
 import axios from "axios";
 // const constants = require('./constants');
+
+
 
 const api = {
   thingiverseUrl: "https://api.thingiverse.com/",
@@ -68,20 +71,48 @@ const PrintThingIntentHandler = {
 
     const newoptions = {
       method: 'get',
-      url: `${api.thingiverseUrl}things/${items.id}?access_token=${api.thingiverseToken}`
+      url: `${api.thingiverseUrl}things/${items.id}/files?access_token=${api.thingiverseToken}`
     }
     let things
     let result: any;
     try {
       things = await axios(newoptions);
-      result = things.data;
+      result = things.data[0];
       console.log( 'result' ,result)
     } catch (e) {
       console.log('error in files')
       console.log(e)
     }
 
-    speechText = `printing ${result.name}`;
+    // const query = 'show tables;';
+try{
+    const connection = await sql.createConnection({
+      host: process.env.DB_HOST,
+      port: 3306,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+      charset: 'utf8mb4'
+    });
+    console.log('connected!');
+
+    let dbcontent = await connection.execute(`insert into file_urls (url) values (?)`,[result.url]);
+    console.log(dbcontent)
+
+    speechText = 'printing';
+    console.log("Speech Text", speechText)
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      // .reprompt("test reprompt")
+      .withSimpleCard('Print Thing', speechText)
+      .getResponse();
+} catch (e) {
+  console.log(e)
+}
+
+    // speechText = `printing ${result.name}`;
+    speechText = 'printing';
     console.log("Speech Text", speechText)
 
     return handlerInput.responseBuilder

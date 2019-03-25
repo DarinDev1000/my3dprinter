@@ -13,6 +13,11 @@ module.exports = {
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js',
   },
+  optimization: {
+   // We no not want to minimize our code.  ----- Fixes an db error -----
+   // ???? How does this fix the db connection issue???????
+   minimize: false
+ },
   target: 'node',
   module: {
     rules: [

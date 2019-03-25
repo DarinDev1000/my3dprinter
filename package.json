@@ -13,10 +13,12 @@
   "dependencies": {
     "ask-sdk": "^2.3.0",
     "axios": "^0.18.0",
+    "mysql2": "^1.6.5",
     "source-map-support": "^0.5.10",
     "thingiverse-js": "^1.0.1"
   },
   "devDependencies": {
+    "@types/mysql2": "github:types/mysql2",
     "@types/node": "^10.12.18",
     "serverless-alexa-skills": "^0.1.0",
     "serverless-webpack": "^5.2.0",
